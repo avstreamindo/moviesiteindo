@@ -6,7 +6,7 @@
   <title>Bioskop Online</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-    .movie-list { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }
+    .movie-list { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; justify-content: center; }
     .movie { cursor: pointer; text-align: center; width: 200px; }
     .movie img { width: 100%; border-radius: 8px; }
 
@@ -30,13 +30,38 @@
       color: white;
       cursor: pointer;
     }
+
+    #pagination {
+      text-align: center;
+      padding-bottom: 20px;
+    }
+    #pagination button {
+      margin: 5px;
+      padding: 8px 12px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #pagination button.active {
+      background-color: #333;
+      color: white;
+    }
   </style>
 </head>
 <body>
   <h1 style="text-align:center">🎬 Bioskop Online</h1>
+
+  <div style="text-align: center; margin: 10px;">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Cari film..."
+      oninput="handleSearch()"
+      style="padding: 10px; width: 300px; font-size: 16px; border-radius: 8px; border: 1px solid #ccc;"
+    />
+  </div>
+
   <div class="movie-list" id="movieList"></div>
   <div id="pagination" class="pagination"></div>
-</main>
 
   <div id="videoModal">
     <div id="closeBtn" onclick="closeVideo()">✖</div>
