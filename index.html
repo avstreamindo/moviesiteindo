@@ -45,11 +45,37 @@
       background-color: #333;
       color: white;
     }
+
+    /* Floating Telegram button */
+    .telegram-float {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #229ED9;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 30px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 1000;
+      font-family: Arial, sans-serif;
+    }
+    .telegram-float img {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+    }
+    .telegram-float:hover {
+      background-color: #1b8bb8;
+    }
   </style>
 </head>
 <body>
   <h1 style="text-align:center">🎬 Bioskop Online</h1>
 
+  <!-- Search Input -->
   <div style="text-align: center; margin: 10px;">
     <input
       type="text"
@@ -60,13 +86,21 @@
     />
   </div>
 
+  <!-- Movie List -->
   <div class="movie-list" id="movieList"></div>
   <div id="pagination" class="pagination"></div>
 
+  <!-- Video Modal -->
   <div id="videoModal">
     <div id="closeBtn" onclick="closeVideo()">✖</div>
     <div id="videoPlayer"></div>
   </div>
+
+  <!-- Floating Telegram Button -->
+  <a href="t.me/UpdateDoodstream1" target="_blank" class="telegram-float">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
+    <span>Channel Telegram</span>
+  </a>
 
   <script src="script.js"></script>
 </body>
