@@ -3,74 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Video Player</title>
+  <title>Putar Video</title>
   <style>
-    body {
-      margin: 0;
-      background-color: black;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-    }
-
-    #videoContainer iframe,
-    #videoContainer video {
-      width: 90vw;
-      height: 80vh;
-    }
-
+    body { margin: 0; padding: 0; background-color: black; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    iframe, video { width: 90vw; height: 80vh; border: none; }
     #closeBtn {
       position: fixed;
       top: 20px;
       right: 30px;
       font-size: 30px;
       color: white;
+      background: rgba(0,0,0,0.5);
+      padding: 10px;
+      border-radius: 50%;
       cursor: pointer;
-      z-index: 9999;
+      z-index: 999;
     }
   </style>
 </head>
 <body>
   <div id="closeBtn" onclick="window.location.href='/'">✖</div>
-  <div id="videoContainer"></div>
-
-  <script>
-    // Ambil parameter ID dari URL
-    const urlParams = new URLSearchParams(window.location.pathname);
-    const pathParts = window.location.pathname.split('/');
-    const id = pathParts[pathParts.length - 1];
-
-    // Load data film
-    fetch('/data/movies.json')
-      .then(res => res.json())
-      .then(data => {
-        const movie = data.bioskop.find(movie => {
-          const linkId = movie.link.split('/').pop(); // Ambil bagian terakhir dari link
-          return linkId === id;
-        });
-
-        if (movie) {
-          const container = document.getElementById('videoContainer');
-          const url = movie.link;
-          let embed = "";
-
-          if (
-            url.includes("youtube.com") ||
-            url.includes("poopstream.blog") ||
-            url.includes("videy.ro")
-          ) {
-            embed = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-          } else {
-            embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
-          }
-
-          container.innerHTML = embed;
-        } else {
-          document.body.innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
-        }
-      });
-  </script>
+  <div id="videoPlayer"></div>
+  <script src="video.js"></script>
 </body>
 </html>

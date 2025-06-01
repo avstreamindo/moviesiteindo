@@ -1,1 +1,1 @@
-/video/:id  /video.html  200
+/v/*    /video.html   200
