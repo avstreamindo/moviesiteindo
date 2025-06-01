@@ -6,7 +6,7 @@ let filteredMovies = [];
 fetch('data/movies.json')
   .then(res => res.json())
   .then(data => {
-    allMovies = data.bioskop.reverse(); // ← membalik urutan agar terbaru di atas
+    allMovies = data.bioskop.reverse();
     filteredMovies = allMovies;
     renderPage();
     renderPagination();
@@ -27,7 +27,12 @@ function renderPage() {
       <img src="${movie.cover}" alt="${movie.title}" />
       <p>${movie.title}</p>
     `;
-    div.addEventListener("click", () => showVideo(movie.link));
+
+    const videoId = movie.link.split("/").pop(); // Ambil ID dari URL (misal: 1gw4jkyu3b5j)
+    div.addEventListener("click", () => {
+      window.location.href = `/video/${videoId}`;
+    });
+
     movieList.appendChild(div);
   });
 }
@@ -61,30 +66,4 @@ function handleSearch() {
   currentPage = 1;
   renderPage();
   renderPagination();
-}
-
-function showVideo(url) {
-  const modal = document.getElementById("videoModal");
-  const player = document.getElementById("videoPlayer");
-  let embed = "";
-
-  if (
-    url.includes("youtube.com") ||
-    url.includes("poopstream.blog") ||
-    url.includes("videy.ro")
-  ) {
-    embed = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-  } else {
-    embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
-  }
-
-  player.innerHTML = embed;
-  modal.style.display = "flex";
-}
-
-function closeVideo() {
-  const modal = document.getElementById("videoModal");
-  const player = document.getElementById("videoPlayer");
-  modal.style.display = "none";
-  player.innerHTML = "";
 }

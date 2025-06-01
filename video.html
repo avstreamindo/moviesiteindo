@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Video Player</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    iframe, video {
+      width: 90vw;
+      height: 80vh;
+    }
+  </style>
+</head>
+<body>
+  <div id="videoPlayer">Loading video...</div>
+
+  <script>
+    const player = document.getElementById("videoPlayer");
+    const pathParts = window.location.pathname.split("/");
+    const videoId = pathParts[pathParts.length - 1];
+
+    const videoUrl = "https://videy.ro/e/" + videoId;
+
+    if (
+      videoUrl.includes("youtube.com") ||
+      videoUrl.includes("poopstream.blog") ||
+      videoUrl.includes("videy.ro")
+    ) {
+      player.innerHTML = `<iframe src="${videoUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    } else {
+      player.innerHTML = `<video controls autoplay><source src="${videoUrl}" type="video/mp4"></video>`;
+    }
+  </script>
+</body>
+</html>
