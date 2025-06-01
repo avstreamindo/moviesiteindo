@@ -6,10 +6,18 @@ let filteredMovies = [];
 fetch('data/movies.json')
   .then(res => res.json())
   .then(data => {
-    allMovies = data.bioskop.reverse(); // ← membalik urutan agar terbaru di atas
+    allMovies = data.bioskop.reverse(); // ← terbaru di atas
     filteredMovies = allMovies;
     renderPage();
     renderPagination();
+
+    // Jika URL mengandung ID video, langsung putar
+    const path = window.location.pathname;
+    const videoId = path.split('/')[1];
+    if (videoId) {
+      const videoUrl = `https://videy.ro/e/${videoId}`;
+      showVideo(videoUrl);
+    }
   });
 
 function renderPage() {
@@ -27,7 +35,10 @@ function renderPage() {
       <img src="${movie.cover}" alt="${movie.title}" />
       <p>${movie.title}</p>
     `;
-    div.addEventListener("click", () => showVideo(movie.link));
+    div.addEventListener("click", () => {
+      const videoId = extractVideoId(movie.link);
+      window.location.href = `/${videoId}`;
+    });
     movieList.appendChild(div);
   });
 }
@@ -63,6 +74,11 @@ function handleSearch() {
   renderPagination();
 }
 
+function extractVideoId(url) {
+  const parts = url.split('/');
+  return parts[parts.length - 1];
+}
+
 function showVideo(url) {
   const modal = document.getElementById("videoModal");
   const player = document.getElementById("videoPlayer");
@@ -87,4 +103,5 @@ function closeVideo() {
   const player = document.getElementById("videoPlayer");
   modal.style.display = "none";
   player.innerHTML = "";
+  window.location.href = "/"; // kembali ke halaman utama
 }
