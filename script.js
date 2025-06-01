@@ -70,7 +70,7 @@ function showVideo(url) {
 
   if (
     url.includes("youtube.com") ||
-    url.includes("youtu.be") ||
+    url.includes("poopstream.blog") ||
     url.includes("videy.ro")
   ) {
     embed = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
