@@ -6,7 +6,7 @@ let filteredMovies = [];
 fetch('data/movies.json')
   .then(res => res.json())
   .then(data => {
-    allMovies = data.bioskop;
+    allMovies = data.bioskop.reverse(); // ← membalik urutan agar terbaru di atas
     filteredMovies = allMovies;
     renderPage();
     renderPagination();
