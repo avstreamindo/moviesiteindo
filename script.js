@@ -34,7 +34,6 @@ function renderPage() {
       </a>
     `;
 
-    // Optional: if you want normal click to still redirect without opening new tab
     div.addEventListener("click", (e) => {
       const isLink = e.target.closest("a");
       if (!isLink && !e.ctrlKey && !e.metaKey && e.button === 0) {
@@ -52,8 +51,26 @@ function renderPagination() {
   pagination.innerHTML = "";
 
   const totalPages = Math.ceil(filteredMovies.length / itemsPerPage);
+  const maxButtons = 5;
+  let startPage = Math.max(1, currentPage - 2);
+  let endPage = startPage + maxButtons - 1;
+  if (endPage > totalPages) {
+    endPage = totalPages;
+    startPage = Math.max(1, endPage - maxButtons + 1);
+  }
 
-  for (let i = 1; i <= totalPages; i++) {
+  if (currentPage > 1) {
+    const prevBtn = document.createElement("button");
+    prevBtn.textContent = "Previous";
+    prevBtn.addEventListener("click", () => {
+      currentPage--;
+      renderPage();
+      renderPagination();
+    });
+    pagination.appendChild(prevBtn);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
     const button = document.createElement("button");
     button.textContent = i;
     if (i === currentPage) {
@@ -65,6 +82,26 @@ function renderPagination() {
       renderPagination();
     });
     pagination.appendChild(button);
+  }
+
+  if (currentPage < totalPages) {
+    const nextBtn = document.createElement("button");
+    nextBtn.textContent = "Next";
+    nextBtn.addEventListener("click", () => {
+      currentPage++;
+      renderPage();
+      renderPagination();
+    });
+    pagination.appendChild(nextBtn);
+
+    const lastBtn = document.createElement("button");
+    lastBtn.textContent = "Last";
+    lastBtn.addEventListener("click", () => {
+      currentPage = totalPages;
+      renderPage();
+      renderPagination();
+    });
+    pagination.appendChild(lastBtn);
   }
 }
 
