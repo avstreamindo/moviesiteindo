@@ -23,14 +23,24 @@ function renderPage() {
   currentMovies.forEach(movie => {
     const div = document.createElement("div");
     div.className = "movie";
-    div.innerHTML = `
-      <img src="${movie.cover}" alt="${movie.title}" />
-      <p>${movie.title}</p>
-    `;
 
     const videoId = movie.link.split("/").pop();
-    div.addEventListener("click", () => {
-      window.location.href = `/video/${videoId}`;
+    const videoUrl = `/video/${videoId}`;
+
+    div.innerHTML = `
+      <a href="${videoUrl}" target="_blank">
+        <img src="${movie.cover}" alt="${movie.title}" />
+        <p>${movie.title}</p>
+      </a>
+    `;
+
+    // Optional: if you want normal click to still redirect without opening new tab
+    div.addEventListener("click", (e) => {
+      const isLink = e.target.closest("a");
+      if (!isLink && !e.ctrlKey && !e.metaKey && e.button === 0) {
+        e.preventDefault();
+        window.location.href = videoUrl;
+      }
     });
 
     movieList.appendChild(div);
@@ -63,12 +73,7 @@ function handleSearch() {
   filteredMovies = allMovies.filter(movie =>
     movie.title.toLowerCase().includes(keyword)
   );
-
-  const totalPages = Math.ceil(filteredMovies.length / itemsPerPage);
-  if (currentPage > totalPages) {
-    currentPage = totalPages || 1; // fallback ke halaman 1 jika tidak ada hasil
-  }
-
+  currentPage = 1;
   renderPage();
   renderPagination();
 }

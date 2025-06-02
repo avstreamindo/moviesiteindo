@@ -7,7 +7,8 @@
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
     .movie-list { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; justify-content: center; }
-    .movie { cursor: pointer; text-align: center; width: 200px; }
+    .movie { text-align: center; width: 200px; }
+    .movie a { text-decoration: none; color: inherit; display: block; }
     .movie img { width: 100%; border-radius: 8px; }
 
     #videoModal {
@@ -46,7 +47,6 @@
       color: white;
     }
 
-    /* Tetap di bagian atas kanan, tapi tidak mengambang */
     .telegram-fixed {
       display: flex;
       justify-content: flex-end;
