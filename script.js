@@ -28,7 +28,7 @@ function renderPage() {
       <p>${movie.title}</p>
     `;
 
-    const videoId = movie.link.split("/").pop(); // Ambil ID dari URL (misal: 1gw4jkyu3b5j)
+    const videoId = movie.link.split("/").pop();
     div.addEventListener("click", () => {
       window.location.href = `/video/${videoId}`;
     });
@@ -63,7 +63,12 @@ function handleSearch() {
   filteredMovies = allMovies.filter(movie =>
     movie.title.toLowerCase().includes(keyword)
   );
-  currentPage = 1;
+
+  const totalPages = Math.ceil(filteredMovies.length / itemsPerPage);
+  if (currentPage > totalPages) {
+    currentPage = totalPages || 1; // fallback ke halaman 1 jika tidak ada hasil
+  }
+
   renderPage();
   renderPagination();
 }
