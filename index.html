@@ -7,12 +7,44 @@
 
   <link rel="icon" type="image/png" href="favicon.png" />
 
-  <style>
+    <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-    .movie-list { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; justify-content: center; }
-    .movie { text-align: center; width: 170px; }
-    .movie a { text-decoration: none; color: inherit; display: block; }
-    .movie img { width: 100%; border-radius: 8px; }
+
+    /* ✅ Ganti Flex jadi Grid & buat responsif */
+    .movie-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Default HP: 2 kolom */
+      gap: 20px;
+      padding: 20px;
+      justify-items: center;
+    }
+
+    /* ✅ Saat layar lebar, tampilkan 6 kolom */
+    @media (min-width: 768px) {
+      .movie-list {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+
+    .movie {
+      width: 100%;
+      max-width: 160px;
+      text-align: center;
+    }
+
+    .movie a {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .movie img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      aspect-ratio: 4 / 5; /* rasio potret seperti TikTok */
+      object-fit: cover;
+    }
 
     #videoModal {
       display: none;
@@ -23,9 +55,11 @@
       justify-content: center;
       align-items: center;
     }
+
     #videoPlayer iframe, #videoPlayer video {
       width: 90vw; height: 80vh;
     }
+
     #closeBtn {
       position: absolute;
       top: 20px;
@@ -39,12 +73,14 @@
       text-align: center;
       padding-bottom: 20px;
     }
+
     #pagination button {
       margin: 5px;
       padding: 8px 12px;
       font-size: 16px;
       cursor: pointer;
     }
+
     #pagination button.active {
       background-color: #ff4800;
       color: white;
