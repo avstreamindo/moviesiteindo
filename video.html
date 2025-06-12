@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -7,55 +7,143 @@
   <style>
     body {
       margin: 0;
-      background-color: black;
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #fff;
+    }
+
+    .navbar {
+      background-color: #000;
+      padding: 10px 20px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      height: 100vh;
-      flex-direction: column;
+      color: #00bfff;
+      font-weight: bold;
+    }
+
+    .navbar a {
+      color: #00bfff;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    .breadcrumb {
+      padding: 10px 20px;
+      background: #222;
+      font-size: 14px;
+    }
+
+    .main-container {
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .video-section {
+      flex: 3;
+      min-width: 300px;
+    }
+
+    .sidebar {
+      flex: 1;
+      min-width: 200px;
+      background: #1b1b1b;
+      padding: 10px;
+    }
+
+    .sidebar h3 {
+      border-bottom: 1px solid #444;
+      padding-bottom: 5px;
+    }
+
+    .sidebar .video-item {
+      display: flex;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .sidebar img {
+      width: 60px;
+      height: 40px;
+      object-fit: cover;
+      margin-right: 10px;
     }
 
     #videoContainer iframe,
     #videoContainer video {
-      width: 90vw;
-      height: 80vh;
+      width: 100%;
+      height: 480px;
+      background-color: black;
+    }
+
+    .video-info {
+      margin-top: 15px;
+    }
+
+    .video-info h2 {
+      margin: 10px 0 5px;
     }
 
     #closeBtn {
       position: fixed;
-      top: 20px;
-      right: 30px;
-      font-size: 30px;
-      color: white;
+      top: 15px;
+      right: 20px;
+      font-size: 26px;
+      color: #fff;
       cursor: pointer;
       z-index: 9999;
     }
   </style>
 </head>
 <body>
+  <!-- Navigasi -->
+  <div class="navbar">
+    <a href="/">🎬 Bioskop Online</a>
+  </div>
+
+  <!-- Tombol close -->
   <div id="closeBtn" onclick="window.location.href='/'">✖</div>
-  <div id="videoContainer"></div>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    Home » INDO 18++ » <span id="videoTitle">Memuat...</span>
+  </div>
+
+  <!-- Konten Utama -->
+  <div class="main-container">
+    <div class="video-section">
+      <div id="videoContainer">Memuat video...</div>
+      <div class="video-info">
+        <h2 id="videoTitle2">Judul Video</h2>
+        <p>Dipost oleh: <span id="uploader">admin</span></p>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h3>Most View Movies</h3>
+      <div id="popularList"></div>
+    </aside>
+  </div>
 
   <script>
-    // Ambil parameter ID dari URL
-    const urlParams = new URLSearchParams(window.location.pathname);
     const pathParts = window.location.pathname.split('/');
     const id = pathParts[pathParts.length - 1];
 
-    // Load data film
     fetch('/data/movies.json')
       .then(res => res.json())
       .then(data => {
-        const movie = data.bioskop.find(movie => {
-          const linkId = movie.link.split('/').pop(); // Ambil bagian terakhir dari link
-          return linkId === id;
-        });
+        const movie = data.bioskop?.find(movie => movie.link.split('/').pop() === id);
 
         if (movie) {
+          document.getElementById("videoTitle").textContent = movie.title;
+          document.getElementById("videoTitle2").textContent = movie.title;
+
           const container = document.getElementById('videoContainer');
           const url = movie.link;
-          let embed = "";
 
+          let embed = "";
           if (
             url.includes("videy.cx") ||
             url.includes("dood.lu") ||
@@ -68,7 +156,24 @@
 
           container.innerHTML = embed;
         } else {
-          document.body.innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
+          document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
+        }
+
+        // Sidebar popular list
+        const listContainer = document.getElementById("popularList");
+        if (data.bioskop?.length) {
+          data.bioskop.slice(0, 5).forEach(item => {
+            const linkId = item.link.split('/').pop();
+            const el = document.createElement("div");
+            el.className = "video-item";
+            el.innerHTML = `
+              <img src="${item.cover}" alt="${item.title}">
+              <div>
+                <a href="/video/${linkId}" style="color: #00bfff; text-decoration: none;">${item.title.substring(0, 30)}...</a>
+              </div>
+            `;
+            listContainer.appendChild(el);
+          });
         }
       });
   </script>
