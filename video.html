@@ -106,35 +106,10 @@
       border-radius: 8px;
       font-weight: bold;
     }
-
-    /* Fullscreen embed only on desktop */
-    @media (min-width: 768px) {
-      body.desktop-fullscreen {
-        background: black;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      }
-
-      body.desktop-fullscreen *:not(#videoContainer):not(iframe):not(video) {
-        display: none !important;
-      }
-
-      body.desktop-fullscreen #videoContainer {
-        width: 90vw;
-        height: 90vh;
-      }
-
-      body.desktop-fullscreen iframe,
-      body.desktop-fullscreen video {
-        width: 100%;
-        height: 100%;
-      }
-    }
   </style>
 </head>
 <body>
+  <!-- Navigasi -->
   <div class="navbar">
     <a href="/">
       <img src="/favicon.png" alt="Logo" style="height: 24px; vertical-align: middle; margin-right: 8px;">
@@ -142,12 +117,15 @@
     </a>
   </div>
 
+  <!-- Tombol close -->
   <div id="closeBtn" onclick="window.location.href='/'">✖</div>
 
+  <!-- Breadcrumb -->
   <div class="breadcrumb">
     <a href="/" style="color:#00bfff; text-decoration: none;">Home</a> » <span id="videoTitle">Memuat...</span>
   </div>
 
+  <!-- Konten Utama -->
   <div class="main-container">
     <div class="video-section">
       <div id="videoContainer">Memuat video...</div>
@@ -157,6 +135,7 @@
       </div>
     </div>
 
+    <!-- Sidebar -->
     <aside class="sidebar">
       <h3>Most View Movies</h3>
       <div id="popularList"></div>
@@ -168,17 +147,11 @@
     const id = pathParts[pathParts.length - 1].trim();
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    if (!isMobile) {
-      document.body.classList.add('desktop-fullscreen');
-    }
-
-    // Load data film
     fetch('/data/movies.json')
       .then(res => res.json())
       .then(data => {
-        const movieList = data.bioskop || [];
-        const movie = movieList.find(movie => {
-          const linkId = movie.link.split('/').pop();
+        const movie = data.bioskop?.find(movie => {
+          const linkId = movie.link?.split('/').pop()?.trim();
           return linkId === id;
         });
 
@@ -189,6 +162,7 @@
 
           const container = document.getElementById('videoContainer');
           const url = movie.link;
+
           let embed = "";
 
           if (
@@ -196,15 +170,43 @@
             url.includes("dood.lu") ||
             url.includes("videy.ro")
           ) {
-            embed = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>`;
+            if (isMobile) {
+              embed = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>`;
+            } else {
+              embed = `
+                <p>Video hanya bisa diputar di perangkat mobile.</p>
+                <a href="${url}" target="_blank" class="button">Buka Video di Tab Baru</a>
+              `;
+            }
           } else {
             embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
           }
 
           container.innerHTML = embed;
         } else {
-          document.body.innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
+          document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
         }
+
+        // Sidebar Popular List
+        const listContainer = document.getElementById("popularList");
+        if (data.bioskop?.length) {
+          data.bioskop.slice(0, 5).forEach(item => {
+            const linkId = item.link?.split('/').pop();
+            const el = document.createElement("div");
+            el.className = "video-item";
+            el.innerHTML = `
+              <img src="${item.cover}" alt="${item.title}">
+              <div>
+                <a href="/video/${linkId}" style="color: #00bfff; text-decoration: none;">${item.title.substring(0, 30)}...</a>
+              </div>
+            `;
+            listContainer.appendChild(el);
+          });
+        }
+      })
+      .catch(error => {
+        document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Gagal memuat video</h2>";
+        console.error("Gagal fetch movies.json:", error);
       });
   </script>
 </body>
