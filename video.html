@@ -95,6 +95,17 @@
       cursor: pointer;
       z-index: 9999;
     }
+
+    a.button {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #00bfff;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -134,20 +145,14 @@
   <script>
     const pathParts = window.location.pathname.split('/');
     const id = pathParts[pathParts.length - 1].trim();
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     fetch('/data/movies.json')
       .then(res => res.json())
       .then(data => {
-        // Cari movie berdasarkan ID dari link
         const movie = data.bioskop?.find(movie => {
           const linkId = movie.link?.split('/').pop()?.trim();
           return linkId === id;
-        });
-
-        // Debug log
-        console.log("URL ID:", id);
-        data.bioskop?.forEach(movie => {
-          console.log("Movie:", movie.title, "→", movie.link.split('/').pop());
         });
 
         if (movie) {
@@ -159,12 +164,20 @@
           const url = movie.link;
 
           let embed = "";
+
           if (
             url.includes("videy.cx") ||
             url.includes("dood.lu") ||
             url.includes("videy.ro")
           ) {
-            embed = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>`;
+            if (isMobile) {
+              embed = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>`;
+            } else {
+              embed = `
+                <p>Video hanya bisa diputar di perangkat mobile.</p>
+                <a href="${url}" target="_blank" class="button">Buka Video di Tab Baru</a>
+              `;
+            }
           } else {
             embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
           }
