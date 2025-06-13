@@ -156,34 +156,43 @@
           return linkId === id;
         });
 
-        if (movie) {
-          document.getElementById("videoTitle").textContent = movie.title;
-          document.getElementById("videoTitle2").textContent = movie.title;
-          document.title = movie.title;
-
-          const container = document.getElementById('videoContainer');
-          const url = movie.link;
-
-          let embed = "";
-
-          if (
-            url.includes("videy.cx") ||
-            url.includes("dood.lu") ||
-            url.includes("videy.ro")
-          ) {
-            embed = `
-              <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>
-              <p>Jika video tidak muncul atau error, silakan buka langsung di tab baru:</p>
-              <a href="${url}" target="_blank" class="button">Buka Video di Tab Baru</a>
-            `;
-          } else {
-            embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
-          }
-
-          container.innerHTML = embed;
-        } else {
+        if (!movie) {
           document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
+          return;
         }
+
+        // Redirect jika desktop
+        if (!isMobile) {
+          window.location.href = movie.link;
+          return;
+        }
+
+        // Tampilan untuk mobile
+        document.getElementById("videoTitle").textContent = movie.title;
+        document.getElementById("videoTitle2").textContent = movie.title;
+        document.title = movie.title;
+
+        const container = document.getElementById('videoContainer');
+        const url = movie.link;
+
+        let embed = "";
+
+        if (
+          url.includes("videy.cx") ||
+          url.includes("dood.lu") ||
+          url.includes("videy.ro") ||
+          url.includes("videq.cloud")
+        ) {
+          embed = `
+            <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>
+            <p>Jika video tidak muncul atau error, silakan buka langsung di tab baru:</p>
+            <a href="${url}" target="_blank" class="button">Buka Video di Tab Baru</a>
+          `;
+        } else {
+          embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
+        }
+
+        container.innerHTML = embed;
 
         // Sidebar Popular List
         const listContainer = document.getElementById("popularList");
