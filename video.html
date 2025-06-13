@@ -172,12 +172,13 @@
       document.body.classList.add('desktop-fullscreen');
     }
 
+    // Load data film
     fetch('/data/movies.json')
       .then(res => res.json())
       .then(data => {
-        const movieList = Array.isArray(data) ? data : data.bioskop || [];
+        const movieList = data.bioskop || [];
         const movie = movieList.find(movie => {
-          const linkId = movie.link?.split('/').pop()?.trim();
+          const linkId = movie.link.split('/').pop();
           return linkId === id;
         });
 
@@ -195,39 +196,15 @@
             url.includes("dood.lu") ||
             url.includes("videy.ro")
           ) {
-            embed = `
-              <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>
-              ${isMobile ? `<p>Jika video tidak muncul, klik tombol berikut:</p><a href="${url}" target="_blank" class="button">Buka di Tab Baru</a>` : ""}
-            `;
+            embed = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>`;
           } else {
             embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
           }
 
           container.innerHTML = embed;
         } else {
-          document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
+          document.body.innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
         }
-
-        // Sidebar
-        const listContainer = document.getElementById("popularList");
-        if (movieList.length && listContainer) {
-          movieList.slice(0, 5).forEach(item => {
-            const linkId = item.link?.split('/').pop();
-            const el = document.createElement("div");
-            el.className = "video-item";
-            el.innerHTML = `
-              <img src="${item.cover}" alt="${item.title}">
-              <div>
-                <a href="/video/${linkId}" style="color: #00bfff; text-decoration: none;">${item.title.substring(0, 30)}...</a>
-              </div>
-            `;
-            listContainer.appendChild(el);
-          });
-        }
-      })
-      .catch(error => {
-        document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Gagal memuat video</h2>";
-        console.error("Gagal fetch movies.json:", error);
       });
   </script>
 </body>
