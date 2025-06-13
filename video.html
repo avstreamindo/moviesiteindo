@@ -106,10 +106,35 @@
       border-radius: 8px;
       font-weight: bold;
     }
+
+    /* Fullscreen embed only on desktop */
+    @media (min-width: 768px) {
+      body.desktop-fullscreen {
+        background: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      body.desktop-fullscreen *:not(#videoContainer):not(iframe):not(video) {
+        display: none !important;
+      }
+
+      body.desktop-fullscreen #videoContainer {
+        width: 90vw;
+        height: 90vh;
+      }
+
+      body.desktop-fullscreen iframe,
+      body.desktop-fullscreen video {
+        width: 100%;
+        height: 100%;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- Navigasi -->
   <div class="navbar">
     <a href="/">
       <img src="/favicon.png" alt="Logo" style="height: 24px; vertical-align: middle; margin-right: 8px;">
@@ -117,15 +142,12 @@
     </a>
   </div>
 
-  <!-- Tombol close -->
   <div id="closeBtn" onclick="window.location.href='/'">✖</div>
 
-  <!-- Breadcrumb -->
   <div class="breadcrumb">
     <a href="/" style="color:#00bfff; text-decoration: none;">Home</a> » <span id="videoTitle">Memuat...</span>
   </div>
 
-  <!-- Konten Utama -->
   <div class="main-container">
     <div class="video-section">
       <div id="videoContainer">Memuat video...</div>
@@ -135,7 +157,6 @@
       </div>
     </div>
 
-    <!-- Sidebar -->
     <aside class="sidebar">
       <h3>Most View Movies</h3>
       <div id="popularList"></div>
@@ -147,6 +168,10 @@
     const id = pathParts[pathParts.length - 1].trim();
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
+    if (!isMobile) {
+      document.body.classList.add('desktop-fullscreen');
+    }
+
     fetch('/data/movies.json')
       .then(res => res.json())
       .then(data => {
@@ -156,47 +181,36 @@
           return linkId === id;
         });
 
-        if (!movie) {
-          document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
-          return;
-        }
+        if (movie) {
+          document.getElementById("videoTitle").textContent = movie.title;
+          document.getElementById("videoTitle2").textContent = movie.title;
+          document.title = movie.title;
 
-        // Redirect jika desktop
-        if (!isMobile) {
-          window.location.href = movie.link;
-          return;
-        }
+          const container = document.getElementById('videoContainer');
+          const url = movie.link;
+          let embed = "";
 
-        // Tampilan untuk mobile
-        document.getElementById("videoTitle").textContent = movie.title;
-        document.getElementById("videoTitle2").textContent = movie.title;
-        document.title = movie.title;
+          if (
+            url.includes("videy.cx") ||
+            url.includes("dood.lu") ||
+            url.includes("videy.ro")
+          ) {
+            embed = `
+              <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>
+              ${isMobile ? `<p>Jika video tidak muncul, klik tombol berikut:</p><a href="${url}" target="_blank" class="button">Buka di Tab Baru</a>` : ""}
+            `;
+          } else {
+            embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
+          }
 
-        const container = document.getElementById('videoContainer');
-        const url = movie.link;
-
-        let embed = "";
-
-        if (
-          url.includes("videy.cx") ||
-          url.includes("dood.lu") ||
-          url.includes("videy.ro") ||
-          url.includes("videq.cloud")
-        ) {
-          embed = `
-            <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>
-            <p>Jika video tidak muncul atau error, silakan buka langsung di tab baru:</p>
-            <a href="${url}" target="_blank" class="button">Buka Video di Tab Baru</a>
-          `;
+          container.innerHTML = embed;
         } else {
-          embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
+          document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
         }
 
-        container.innerHTML = embed;
-
-        // Sidebar Popular List
+        // Sidebar
         const listContainer = document.getElementById("popularList");
-        if (movieList.length) {
+        if (movieList.length && listContainer) {
           movieList.slice(0, 5).forEach(item => {
             const linkId = item.link?.split('/').pop();
             const el = document.createElement("div");
