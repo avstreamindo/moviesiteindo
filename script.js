@@ -6,7 +6,7 @@ let filteredMovies = [];
 fetch('data/movies.json')
   .then(res => res.json())
   .then(data => {
-    allMovies = data.reverse();
+    allMovies = data.bioskop.reverse();
     filteredMovies = allMovies;
     renderPage();
     renderPagination();
