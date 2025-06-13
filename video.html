@@ -150,7 +150,8 @@
     fetch('/data/movies.json')
       .then(res => res.json())
       .then(data => {
-        const movie = data.bioskop?.find(movie => {
+        const movieList = Array.isArray(data) ? data : data.bioskop || [];
+        const movie = movieList.find(movie => {
           const linkId = movie.link?.split('/').pop()?.trim();
           return linkId === id;
         });
@@ -170,14 +171,11 @@
             url.includes("dood.lu") ||
             url.includes("videy.ro")
           ) {
-            if (isMobile) {
-              embed = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>`;
-            } else {
-              embed = `
-                <p>Video hanya bisa diputar di perangkat mobile.</p>
-                <a href="${url}" target="_blank" class="button">Buka Video di Tab Baru</a>
-              `;
-            }
+            embed = `
+              <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>
+              <p>Jika video tidak muncul atau error, silakan buka langsung di tab baru:</p>
+              <a href="${url}" target="_blank" class="button">Buka Video di Tab Baru</a>
+            `;
           } else {
             embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
           }
@@ -189,8 +187,8 @@
 
         // Sidebar Popular List
         const listContainer = document.getElementById("popularList");
-        if (data.bioskop?.length) {
-          data.bioskop.slice(0, 5).forEach(item => {
+        if (movieList.length) {
+          movieList.slice(0, 5).forEach(item => {
             const linkId = item.link?.split('/').pop();
             const el = document.createElement("div");
             el.className = "video-item";
