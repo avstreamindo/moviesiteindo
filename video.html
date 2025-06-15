@@ -86,6 +86,17 @@
       margin: 10px 0 5px;
     }
 
+    .warning {
+      background-color: #222;
+      color: #ff4c4c;
+      font-weight: bold;
+      padding: 12px;
+      text-align: center;
+      margin-top: 20px;
+      border: 2px solid #ff4c4c;
+      border-radius: 8px;
+    }
+
     #closeBtn {
       position: fixed;
       top: 15px;
@@ -129,6 +140,10 @@
   <div class="main-container">
     <div class="video-section">
       <div id="videoContainer">Memuat video...</div>
+      
+      <!-- Pesan peringatan DNS -->
+      <div class="warning">Matikan DNS Kalau video tidak bisa di play!!!</div>
+      
       <div class="video-info">
         <h2 id="videoTitle2">Judul Video</h2>
         <p>Dipost oleh: <span id="uploader">admin</span></p>
@@ -170,10 +185,8 @@
             url.includes("videy.ro")
           ) {
             if (isMobile) {
-              // TETAP iframe saja di mobile
               embed = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>`;
             } else {
-              // Di desktop: iframe + tombol di bawah
               embed = `
                 <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>
                 <div style="margin-top: 15px;">
@@ -190,7 +203,7 @@
           document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
         }
 
-        // Sidebar Popular List
+        // Sidebar
         const listContainer = document.getElementById("popularList");
         if (data.bioskop?.length) {
           data.bioskop.slice(0, 5).forEach(item => {
