@@ -162,7 +162,6 @@
 
           const container = document.getElementById('videoContainer');
           const url = movie.link;
-
           let embed = "";
 
           if (
@@ -171,11 +170,15 @@
             url.includes("videy.ro")
           ) {
             if (isMobile) {
+              // TETAP iframe saja di mobile
               embed = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>`;
             } else {
+              // Di desktop: iframe + tombol di bawah
               embed = `
-                <p>Buka Video Klik Tombol Tulisan Di Bawah.</p>
-                <a href="${url}" target="_blank" class="button">Buka Video di Tab Baru</a>
+                <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>
+                <div style="margin-top: 15px;">
+                  <a href="${url}" target="_blank" class="button">Buka Video di Tab Baru</a>
+                </div>
               `;
             }
           } else {
