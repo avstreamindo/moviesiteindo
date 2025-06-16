@@ -117,6 +117,35 @@
       border-radius: 8px;
       font-weight: bold;
     }
+
+    .telegram-fixed {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .telegram-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      background-color: #0088cc;
+      padding: 8px 14px;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .telegram-link:hover {
+      background-color: #006f9c;
+    }
+
+    .telegram-link img {
+      width: 20px;
+      height: 20px;
+      margin-right: 8px;
+    }
   </style>
 </head>
 <body>
@@ -146,6 +175,15 @@
       
       <div class="video-info">
         <h2 id="videoTitle2">Judul Video</h2>
+
+        <!-- Telegram Button -->
+        <div class="telegram-fixed">
+          <a href="https://t.me/UpdateDoodstream1" target="_blank" class="telegram-link">
+            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
+            <span>Channel Tele</span>
+          </a>
+        </div>
+
         <p>Dipost oleh: <span id="uploader">admin</span></p>
       </div>
     </div>
