@@ -114,3 +114,19 @@ function handleSearch() {
   renderPage();
   renderPagination();
 }
+
+function filterCategory(keyword) {
+  filteredMovies = allMovies.filter(movie =>
+    movie.title.toLowerCase().includes(keyword.toLowerCase())
+  );
+  currentPage = 1;
+  renderPage();
+  renderPagination();
+}
+
+function resetFilter() {
+  filteredMovies = allMovies;
+  currentPage = 1;
+  renderPage();
+  renderPagination();
+}
