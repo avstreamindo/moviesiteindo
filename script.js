@@ -25,7 +25,7 @@ function renderPage() {
     div.className = "movie";
 
     const videoId = movie.link.split("/").pop();
-    const videoUrl = `/video/${videoId}`;
+    const videoUrl = `/v/${videoId}`;
 
     div.innerHTML = `
       <a href="${videoUrl}" target="_blank">

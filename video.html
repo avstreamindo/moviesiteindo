@@ -241,7 +241,7 @@
           document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
         }
 
-        // Sidebar
+        // Sidebar ke /v/:id
         const listContainer = document.getElementById("popularList");
         if (data.bioskop?.length) {
           data.bioskop.slice(0, 5).forEach(item => {
@@ -251,7 +251,7 @@
             el.innerHTML = `
               <img src="${item.cover}" alt="${item.title}">
               <div>
-                <a href="/video/${linkId}" style="color: #00bfff; text-decoration: none;">${item.title.substring(0, 30)}...</a>
+                <a href="/v/${linkId}" style="color: #00bfff; text-decoration: none;">${item.title.substring(0, 30)}...</a>
               </div>
             `;
             listContainer.appendChild(el);
