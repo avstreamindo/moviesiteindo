@@ -3,244 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title id="pageTitle">Video Player</title>
-  <link rel="icon" type="image/png" href="/favicon.png" />
-  <style>
-    /* [--- STYLES TETAP SESUAI PUNYAMU ---] */
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #111;
-      color: #fff;
-    }
-    .navbar {
-      background-color: #000;
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      color: #00bfff;
-      font-weight: bold;
-    }
-    .navbar a {
-      color: #00bfff;
-      text-decoration: none;
-      font-size: 24px;
-    }
-    .breadcrumb {
-      padding: 10px 20px;
-      background: #222;
-      font-size: 14px;
-    }
-    .main-container {
-      display: flex;
-      padding: 20px;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    .video-section {
-      flex: 3;
-      min-width: 300px;
-    }
-    .sidebar {
-      flex: 1;
-      min-width: 200px;
-      background: #1b1b1b;
-      padding: 10px;
-    }
-    .sidebar h3 {
-      border-bottom: 1px solid #444;
-      padding-bottom: 5px;
-    }
-    .sidebar .video-item {
-      display: flex;
-      margin-bottom: 10px;
-      cursor: pointer;
-    }
-    .sidebar img {
-      width: 60px;
-      height: 40px;
-      object-fit: cover;
-      margin-right: 10px;
-    }
-    #videoContainer iframe,
-    #videoContainer video {
-      width: 100%;
-      height: 480px;
-      background-color: black;
-    }
-    .video-info {
-      margin-top: 15px;
-    }
-    .video-info h2 {
-      margin: 10px 0 5px;
-    }
-    .warning {
-      background-color: #222;
-      color: #ff4c4c;
-      font-weight: bold;
-      padding: 12px;
-      text-align: center;
-      margin-top: 20px;
-      border: 2px solid #ff4c4c;
-      border-radius: 8px;
-    }
-    #closeBtn {
-      position: fixed;
-      top: 15px;
-      right: 20px;
-      font-size: 26px;
-      color: #fff;
-      cursor: pointer;
-      z-index: 9999;
-    }
-    a.button {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 10px 20px;
-      background-color: #00bfff;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-    .telegram-fixed {
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .telegram-link {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-      background-color: #0088cc;
-      padding: 8px 14px;
-      border-radius: 8px;
-      color: white;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
-    }
-    .telegram-link:hover {
-      background-color: #006f9c;
-    }
-    .telegram-link img {
-      width: 20px;
-      height: 20px;
-      margin-right: 8px;
-    }
-  </style>
+  <title>Redirecting...</title>
 </head>
 <body>
-  <!-- Navigasi -->
-  <div class="navbar">
-    <a href="/">
-      <img src="/favicon.png" alt="Logo" style="height: 24px; vertical-align: middle; margin-right: 8px;">
-      BIOSKOP ONLINE<br>
-      (Bokep Indo, Barat Sub Indo, Jav Sub Indo)
-    </a>
-  </div>
-
-  <!-- Tombol close -->
-  <div id="closeBtn" onclick="window.location.href='/'">✖</div>
-
-  <!-- Breadcrumb -->
-  <div class="breadcrumb">
-    <a href="/" style="color:#00bfff; text-decoration: none;">Home</a> » <span id="videoTitle">Memuat...</span>
-  </div>
-
-  <!-- Konten Utama -->
-  <div class="main-container">
-    <div class="video-section">
-      <div id="videoContainer">Memuat video...</div>
-      <div class="warning">Matikan DNS Kalau video tidak bisa di play!!!</div>
-
-      <div class="video-info">
-        <h2 id="videoTitle2">Judul Video</h2>
-
-        <div class="telegram-fixed">
-          <a href="https://t.me/UpdateDoodstream1" target="_blank" class="telegram-link">
-            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
-            <span>Channel Tele</span>
-          </a>
-        </div>
-
-        <p>Dipost oleh: <span id="uploader">admin</span></p>
-      </div>
-    </div>
-
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <h3>Most View Movies</h3>
-      <div id="popularList"></div>
-    </aside>
-  </div>
+  <h2>Sedang mengarahkan ke video...</h2>
 
   <script>
-    const pathParts = window.location.pathname.split('/');
-    const id = pathParts[pathParts.length - 1].trim(); // ambil ID dari URL terakhir
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const videoId = window.location.pathname.split("/").pop();
 
     fetch('/data/movies.json')
-      .then(res => res.json())
-      .then(data => {
-        const movie = data.bioskop?.find(movie => {
-          const linkId = movie.link?.split('/').pop()?.trim();
-          return linkId === id;
+      .then(response => response.json())
+      .then(movies => {
+        const movie = movies.find(item => {
+          const urlParts = item.link.split("/");
+          return urlParts[urlParts.length - 1] === videoId;
         });
 
         if (movie) {
-          document.getElementById("videoTitle").textContent = movie.title;
-          document.getElementById("videoTitle2").textContent = movie.title;
-          document.title = movie.title;
-
-          const container = document.getElementById('videoContainer');
-          const url = movie.link;
-          let embed = "";
-
-          if (
-            url.includes("luluv.do") ||
-            url.includes("videq.app") ||
-            url.includes("videq.pro")
-          ) {
-            if (isMobile) {
-              embed = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>`;
-            } else {
-              embed = `
-                <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>
-                <div style="margin-top: 15px;">
-                  <a href="${url}" target="_blank" class="button">Buka Video di Tab Baru</a>
-                </div>
-              `;
-            }
-          } else {
-            embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
-          }
-
-          container.innerHTML = embed;
+          window.location.href = movie.link;
         } else {
-          document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
-        }
-
-        // Sidebar populer
-        const listContainer = document.getElementById("popularList");
-        if (data.bioskop?.length) {
-          data.bioskop.slice(0, 5).forEach(item => {
-            const linkId = item.link?.split('/').pop();
-            const el = document.createElement("div");
-            el.className = "video-item";
-            el.innerHTML = `
-              <img src="${item.cover}" alt="${item.title}">
-              <div>
-                <a href="/v/${linkId}" style="color: #00bfff; text-decoration: none;">${item.title.substring(0, 30)}...</a>
-              </div>
-            `;
-            listContainer.appendChild(el);
-          });
+          document.body.innerHTML = "<h2>Video tidak ditemukan</h2>";
         }
       })
       .catch(error => {
-        document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Gagal memuat video</h2>";
-        console.error("Gagal fetch movies.json:", error);
+        console.error("Gagal memuat data:", error);
+        document.body.innerHTML = "<h2>Terjadi kesalahan saat memuat data</h2>";
       });
   </script>
 </body>
