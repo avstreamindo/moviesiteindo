@@ -170,10 +170,10 @@
   <div class="main-container">
     <div class="video-section">
       <div id="videoContainer">Memuat video...</div>
-
+      
       <!-- Pesan peringatan DNS -->
       <div class="warning">Matikan DNS Kalau video tidak bisa di play!!!</div>
-
+      
       <div class="video-info">
         <h2 id="videoTitle2">Judul Video</h2>
 
@@ -197,36 +197,52 @@
   </div>
 
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const videoId = urlParams.get('id');
+    const pathParts = window.location.pathname.split('/');
+    const id = pathParts[pathParts.length - 1].trim();
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    if (videoId) {
-      const fullUrl = `https://videq.pro/e/${videoId}`;
-      document.getElementById("videoTitle").textContent = "Memutar Video...";
-      document.getElementById("videoTitle2").textContent = "Video";
-      document.title = "Video";
-
-      let embed = "";
-      if (isMobile) {
-        embed = `<iframe src="${fullUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>`;
-      } else {
-        embed = `
-          <iframe src="${fullUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>
-          <div style="margin-top: 15px;">
-            <a href="${fullUrl}" target="_blank" class="button">Buka Video di Tab Baru</a>
-          </div>
-        `;
-      }
-      document.getElementById("videoContainer").innerHTML = embed;
-    } else {
-      document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>ID Video tidak ditemukan di URL</h2>";
-    }
-
-    // Sidebar manual (optional dari movies.json)
     fetch('/data/movies.json')
       .then(res => res.json())
       .then(data => {
+        const movie = data.bioskop?.find(movie => {
+          const linkId = movie.link?.split('/').pop()?.trim();
+          return linkId === id;
+        });
+
+        if (movie) {
+          document.getElementById("videoTitle").textContent = movie.title;
+          document.getElementById("videoTitle2").textContent = movie.title;
+          document.title = movie.title;
+
+          const container = document.getElementById('videoContainer');
+          const url = movie.link;
+          let embed = "";
+
+          if (
+            url.includes("luluv.do") ||
+            url.includes("videq.app") ||
+            url.includes("videq.pro")
+          ) {
+            if (isMobile) {
+              embed = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>`;
+            } else {
+              embed = `
+                <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>
+                <div style="margin-top: 15px;">
+                  <a href="${url}" target="_blank" class="button">Buka Video di Tab Baru</a>
+                </div>
+              `;
+            }
+          } else {
+            embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
+          }
+
+          container.innerHTML = embed;
+        } else {
+          document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
+        }
+
+        // Sidebar ke /v/:id
         const listContainer = document.getElementById("popularList");
         if (data.bioskop?.length) {
           data.bioskop.slice(0, 5).forEach(item => {
@@ -236,12 +252,16 @@
             el.innerHTML = `
               <img src="${item.cover}" alt="${item.title}">
               <div>
-                <a href="/video.html?id=${linkId}" style="color: #00bfff; text-decoration: none;">${item.title.substring(0, 30)}...</a>
+                <a href="/v/${linkId}" style="color: #00bfff; text-decoration: none;">${item.title.substring(0, 30)}...</a>
               </div>
             `;
             listContainer.appendChild(el);
           });
         }
+      })
+      .catch(error => {
+        document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Gagal memuat video</h2>";
+        console.error("Gagal fetch movies.json:", error);
       });
   </script>
 </body>
