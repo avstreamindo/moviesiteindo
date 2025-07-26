@@ -7,7 +7,13 @@
   <link rel="icon" type="image/png" href="favicon.png" />
 
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: black; color: white; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: black;
+      color: white;
+    }
 
     .movie-list {
       display: grid;
@@ -20,6 +26,25 @@
     @media (min-width: 768px) {
       .movie-list {
         grid-template-columns: repeat(6, 1fr);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .movie-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 10px;
+      }
+
+      .movie {
+        max-width: 100%;
+      }
+
+      .movie img {
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        border-radius: 12px;
+        object-fit: cover;
       }
     }
 
