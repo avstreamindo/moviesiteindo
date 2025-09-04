@@ -199,7 +199,6 @@
   <script>
     const pathParts = window.location.pathname.split('/');
     const id = pathParts[pathParts.length - 1].trim();
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     fetch('/data/movies.json')
       .then(res => res.json())
@@ -223,16 +222,12 @@
             url.includes("videeq.net") ||
             url.includes("videq.pro")
           ) {
-            if (isMobile) {
-              embed = `<iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>`;
-            } else {
-              embed = `
-                <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>
-                <div style="margin-top: 15px;">
-                  <a href="${url}" target="_blank" class="button">Buka Video di Tab Baru</a>
-                </div>
-              `;
-            }
+            embed = `
+              <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups" referrerpolicy="no-referrer"></iframe>
+              <div style="margin-top: 15px;">
+                <a href="${url}" target="_blank" class="button">LINK ALTERNATIF</a>
+              </div>
+            `;
           } else {
             embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
           }
