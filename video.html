@@ -200,64 +200,80 @@
     const pathParts = window.location.pathname.split('/');
     const id = pathParts[pathParts.length - 1].trim();
 
-    fetch('/data/movies.json')
-      .then(res => res.json())
-      .then(data => {
-        const movie = data.bioskop?.find(movie => {
-          const linkId = movie.link?.split('/').pop()?.trim();
-          return linkId === id;
-        });
+    // Daftar file JSON yang mau dipanggil
+    const movieFiles = [
+      '/data/movies.json',
+      '/data/movies2.json'
+      // bisa tambah lagi: '/data/movies3.json'
+    ];
 
-        if (movie) {
-          document.getElementById("videoTitle").textContent = movie.title;
-          document.getElementById("videoTitle2").textContent = movie.title;
-          document.title = movie.title;
+    Promise.all(movieFiles.map(file =>
+      fetch(file).then(res => res.json()).catch(() => ({}))
+    ))
+    .then(results => {
+      // Gabungkan semua bioskop dari tiap file
+      const allMovies = results.flatMap(r => r.bioskop || []);
 
-          const container = document.getElementById('videoContainer');
-          const url = movie.link;
-          let embed = "";
-
-          if (
-            url.includes("vidde.pro") ||
-            url.includes("videeq.net") ||
-            url.includes("videq.pro")
-          ) {
-            embed = `
-              <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups allow-forms" referrerpolicy="no-referrer"></iframe>
-              <div style="margin-top: 15px;">
-                <a href="${url}" target="_blank" class="button">LINK ALTERNATIF</a>
-              </div>
-            `;
-          } else {
-            embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
-          }
-
-          container.innerHTML = embed;
-        } else {
-          document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
-        }
-
-        // Sidebar ke /v/:id
-        const listContainer = document.getElementById("popularList");
-        if (data.bioskop?.length) {
-          data.bioskop.slice(0, 5).forEach(item => {
-            const linkId = item.link?.split('/').pop();
-            const el = document.createElement("div");
-            el.className = "video-item";
-            el.innerHTML = `
-              <img src="${item.cover}" alt="${item.title}">
-              <div>
-                <a href="/v/${linkId}" style="color: #00bfff; text-decoration: none;">${item.title.substring(0, 30)}...</a>
-              </div>
-            `;
-            listContainer.appendChild(el);
-          });
-        }
-      })
-      .catch(error => {
-        document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Gagal memuat video</h2>";
-        console.error("Gagal fetch movies.json:", error);
+      // Cari video sesuai id di URL
+      const movie = allMovies.find(movie => {
+        const linkId = movie.link?.split('/').pop()?.trim();
+        return linkId === id;
       });
+
+      if (movie) {
+        document.getElementById("videoTitle").textContent = movie.title;
+        document.getElementById("videoTitle2").textContent = movie.title;
+        document.title = movie.title;
+
+        const container = document.getElementById('videoContainer');
+        const url = movie.link;
+        let embed = "";
+
+        if (
+          url.includes("vidde.pro") ||
+          url.includes("videeq.net") ||
+          url.includes("videq.pro")
+        ) {
+          embed = `
+            <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen 
+              sandbox="allow-same-origin allow-scripts allow-popups allow-forms" 
+              referrerpolicy="no-referrer"></iframe>
+            <div style="margin-top: 15px;">
+              <a href="${url}" target="_blank" class="button">LINK ALTERNATIF</a>
+            </div>
+          `;
+        } else {
+          embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
+        }
+
+        container.innerHTML = embed;
+      } else {
+        document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
+      }
+
+      // Sidebar daftar populer
+      const listContainer = document.getElementById("popularList");
+      if (allMovies.length) {
+        allMovies.slice(0, 5).forEach(item => {
+          const linkId = item.link?.split('/').pop();
+          const el = document.createElement("div");
+          el.className = "video-item";
+          el.innerHTML = `
+            <img src="${item.cover}" alt="${item.title}">
+            <div>
+              <a href="/v/${linkId}" style="color: #00bfff; text-decoration: none;">
+                ${item.title.substring(0, 30)}...
+              </a>
+            </div>
+          `;
+          listContainer.appendChild(el);
+        });
+      }
+    })
+    .catch(error => {
+      document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Gagal memuat video</h2>";
+      console.error("Gagal fetch JSON:", error);
+    });
   </script>
 </body>
 </html>
