@@ -71,7 +71,6 @@
       margin-right: 10px;
     }
 
-    #videoContainer iframe,
     #videoContainer video {
       width: 100%;
       height: 480px;
@@ -147,7 +146,7 @@
       margin-right: 8px;
     }
 
-    /* === POPUP STYLE === */
+    /* POPUP STYLE */
     .popup-overlay {
       position: fixed;
       top: 0;
@@ -192,7 +191,6 @@
   </style>
 </head>
 <body>
-  <!-- Navigasi -->
   <div class="navbar">
     <a href="/">
       <img src="/favicon.png" alt="Logo" style="height: 24px; vertical-align: middle; margin-right: 8px;">
@@ -201,15 +199,12 @@
     </a>
   </div>
 
-  <!-- Tombol close -->
   <div id="closeBtn" onclick="window.location.href='/'">✖</div>
 
-  <!-- Breadcrumb -->
   <div class="breadcrumb">
     <a href="/" style="color:#00bfff; text-decoration: none;">Home</a> » <span id="videoTitle">Memuat...</span>
   </div>
 
-  <!-- POPUP -->
   <div id="popup" class="popup-overlay">
     <div class="popup-box">
       <div class="popup-close" onclick="closePopup()">×</div>
@@ -217,18 +212,13 @@
     </div>
   </div>
 
-  <!-- Konten Utama -->
   <div class="main-container">
     <div class="video-section">
       <div id="videoContainer">Memuat video...</div>
-      
-      <!-- Pesan peringatan DNS -->
       <div class="warning">Matikan DNS Kalau video tidak bisa di play!!!</div>
-      
       <div class="video-info">
         <h2 id="videoTitle2">Judul Video</h2>
 
-        <!-- Telegram Button -->
         <div class="telegram-fixed">
           <a href="https://t.me/UpdateDoodstream1" target="_blank" class="telegram-link">
             <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
@@ -240,7 +230,6 @@
       </div>
     </div>
 
-    <!-- Sidebar -->
     <aside class="sidebar">
       <h3>Most View Movies</h3>
       <div id="popularList"></div>
@@ -252,10 +241,7 @@
       document.getElementById("popup").style.display = "none";
     }
 
-    // Auto-hide popup setelah 6 detik
-    setTimeout(() => {
-      closePopup();
-    }, 6000);
+    setTimeout(closePopup, 6000);
 
     const pathParts = window.location.pathname.split('/');
     const id = pathParts[pathParts.length - 1].trim();
@@ -263,62 +249,55 @@
     fetch('/data/movies.json')
       .then(res => res.json())
       .then(data => {
-        const movie = data.bioskop?.find(movie => {
-          const linkId = movie.link?.split('/').pop()?.trim();
-          return linkId === id;
-        });
-
-        if (movie) {
-          document.getElementById("videoTitle").textContent = movie.title;
-          document.getElementById("videoTitle2").textContent = movie.title;
-          document.title = movie.title;
-
-          const container = document.getElementById('videoContainer');
-          const url = movie.link;
-          let embed = "";
-
-          if (
-            url.includes("uideo.my") ||
-            url.includes("videeq.net") ||
-            url.includes("videq.pro")
-          ) {
-            embed = `
-              <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups allow-forms" referrerpolicy="no-referrer"></iframe>
-              <div style="margin-top: 15px; text-align: center;">
-                <p style="font-weight: bold; color: #00bfff; font-size: 18px; margin-bottom: 8px;">
-                  JIKA VIDEO TIDAK MUNCUL, KLIK "<span style='color: #ff3333;'>LINK ALTERNATIF</span>" DI BAWAH
-                </p>
-                <a href="${url}" target="_blank" class="button">LINK ALTERNATIF</a>
-              </div>
-            `;
-          } else {
-            embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
-          }
-
-          container.innerHTML = embed;
-        } else {
+        const movie = data.bioskop?.find(movie => movie.link?.split('/').pop()?.trim() === id);
+        if (!movie) {
           document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
+          return;
         }
+
+        document.getElementById("videoTitle").textContent = movie.title;
+        document.getElementById("videoTitle2").textContent = movie.title;
+        document.title = movie.title;
+
+        const url = movie.link;
+        const container = document.getElementById('videoContainer');
+        let embed = "";
+
+        if (
+          url.includes("uideo.my") ||
+          url.includes("videq.pw") ||
+          url.includes("videq.pro")
+        ) {
+          // 🚀 Langsung redirect tanpa countdown
+          embed = `
+            <div style="text-align:center; margin-top:40px;">
+              <h3 style="color:#00bfff;">Video ini dibuka di halaman baru</h3>
+              <p>Jika tidak terbuka otomatis, klik tombol di bawah:</p>
+              <a href="${url}" target="_blank" class="button">BUKA VIDEO</a>
+            </div>
+          `;
+          setTimeout(() => window.open(url, "_blank"), 1500);
+        } else {
+          embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
+        }
+
+        container.innerHTML = embed;
 
         const listContainer = document.getElementById("popularList");
-        if (data.bioskop?.length) {
-          data.bioskop.slice(0, 5).forEach(item => {
-            const linkId = item.link?.split('/').pop();
-            const el = document.createElement("div");
-            el.className = "video-item";
-            el.innerHTML = `
-              <img src="${item.cover}" alt="${item.title}">
-              <div>
-                <a href="/v/${linkId}" style="color: #00bfff; text-decoration: none;">${item.title.substring(0, 30)}...</a>
-              </div>
-            `;
-            listContainer.appendChild(el);
-          });
-        }
+        data.bioskop.slice(0, 5).forEach(item => {
+          const linkId = item.link?.split('/').pop();
+          const el = document.createElement("div");
+          el.className = "video-item";
+          el.innerHTML = `
+            <img src="${item.cover}" alt="${item.title}">
+            <div><a href="/v/${linkId}" style="color: #00bfff; text-decoration: none;">${item.title.substring(0, 30)}...</a></div>
+          `;
+          listContainer.appendChild(el);
+        });
       })
-      .catch(error => {
+      .catch(err => {
+        console.error("Gagal fetch movies.json:", err);
         document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Gagal memuat video</h2>";
-        console.error("Gagal fetch movies.json:", error);
       });
   </script>
 </body>
