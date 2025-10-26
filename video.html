@@ -222,13 +222,11 @@
     <div class="video-section">
       <div id="videoContainer">Memuat video...</div>
       
-      <!-- Pesan peringatan DNS -->
       <div class="warning">Matikan DNS Kalau video tidak bisa di play!!!</div>
       
       <div class="video-info">
         <h2 id="videoTitle2">Judul Video</h2>
 
-        <!-- Telegram Button -->
         <div class="telegram-fixed">
           <a href="https://t.me/UpdateDoodstream1" target="_blank" class="telegram-link">
             <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
@@ -240,7 +238,6 @@
       </div>
     </div>
 
-    <!-- Sidebar -->
     <aside class="sidebar">
       <h3>Most View Movies</h3>
       <div id="popularList"></div>
@@ -252,10 +249,7 @@
       document.getElementById("popup").style.display = "none";
     }
 
-    // Auto-hide popup setelah 6 detik
-    setTimeout(() => {
-      closePopup();
-    }, 6000);
+    setTimeout(() => { closePopup(); }, 6000);
 
     const pathParts = window.location.pathname.split('/');
     const id = pathParts[pathParts.length - 1].trim();
@@ -275,27 +269,24 @@
 
           const container = document.getElementById('videoContainer');
           const url = movie.link;
-          let embed = "";
 
+          // ✅ GANTI BAGIAN INI: langsung redirect ke situs video
           if (
             url.includes("uideo.my") ||
-            url.includes("videeq.net") ||
+            url.includes("videq.pw") ||
             url.includes("videq.pro")
           ) {
-            embed = `
-              <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups allow-forms" referrerpolicy="no-referrer"></iframe>
-              <div style="margin-top: 15px; text-align: center;">
-                <p style="font-weight: bold; color: #00bfff; font-size: 18px; margin-bottom: 8px;">
-                  JIKA VIDEO TIDAK MUNCUL, KLIK "<span style='color: #ff3333;'>LINK ALTERNATIF</span>" DI BAWAH
-                </p>
-                <a href="${url}" target="_blank" class="button">LINK ALTERNATIF</a>
-              </div>
+            // tampilkan pesan sebelum redirect
+            container.innerHTML = `
+              <h2 style="text-align:center;color:#00bfff;">Mengalihkan ke sumber video...</h2>
+              <p style="text-align:center;">Jika tidak otomatis, klik <a href="${url}" target="_blank" style="color:#ff3333;">di sini</a>.</p>
             `;
+            setTimeout(() => {
+              window.location.href = url;
+            }, 1500); // auto redirect setelah 1.5 detik
           } else {
-            embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
+            container.innerHTML = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
           }
-
-          container.innerHTML = embed;
         } else {
           document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
         }
