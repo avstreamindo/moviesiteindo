@@ -213,7 +213,7 @@
   <div id="popup" class="popup-overlay">
     <div class="popup-box">
       <div class="popup-close" onclick="closePopup()">×</div>
-      <p>NONTONNYA DI <span style="color:#ff3333;">LINK ALTERNATIF</span> DI BAWAH</p>
+      <p>MENUJU VIDEO DALAM 1 DETIK</p>
     </div>
   </div>
 
@@ -283,7 +283,7 @@
             `;
             setTimeout(() => {
               window.location.href = url;
-            }, 1500); // auto redirect setelah 1.5 detik
+            }, 500); // auto redirect setelah 1.5 detik
           } else {
             container.innerHTML = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
           }
