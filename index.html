@@ -198,7 +198,6 @@
 
   <h1 style="text-align:center">🎬 Bioskop Online</h1>
 
-  <!-- Search Input -->
   <div style="text-align: center; margin: 10px;">
     <input
       type="text"
@@ -209,7 +208,6 @@
     />
   </div>
 
-  <!-- Kategori Button -->
   <div class="category-buttons">
     <button onclick="filterCategory('Barat Sub Indo')">Barat Sub Indo</button>
     <button onclick="filterCategory('Jav Sub Indo')">Jav Sub Indo</button>
@@ -218,16 +216,20 @@
     <button onclick="resetFilter()">Semua</button>
   </div>
 
-  <!-- Movie List -->
   <div class="movie-list" id="movieList"></div>
   <div id="pagination" class="pagination"></div>
 
-  <!-- Video Modal -->
   <div id="videoModal">
     <div id="closeBtn" onclick="closeVideo()">✖</div>
     <div id="videoPlayer"></div>
   </div>
 
   <script src="script.js"></script>
+
+  <!-- 🧩 Tambahan Analytics -->
+  <script type="module">
+    import { inject } from "https://unpkg.com/@vercel/analytics";
+    inject();
+  </script>
 </body>
 </html>

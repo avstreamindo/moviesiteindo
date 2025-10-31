@@ -312,5 +312,10 @@
         console.error("Gagal fetch movies.json:", error);
       });
   </script>
+
+  <script type="module">
+    import { inject } from "https://unpkg.com/@vercel/analytics";
+    inject();
+  </script>
 </body>
 </html>
