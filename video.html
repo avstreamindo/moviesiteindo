@@ -61,12 +61,6 @@
       object-fit: cover;
       margin-right: 10px;
     }
-    #videoContainer iframe,
-    #videoContainer video {
-      width: 100%;
-      height: 480px;
-      background-color: black;
-    }
     .video-info {
       margin-top: 15px;
     }
@@ -91,16 +85,6 @@
       color: #fff;
       cursor: pointer;
       z-index: 9999;
-    }
-    a.button {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 10px 20px;
-      background-color: #00bfff;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: bold;
     }
     .telegram-fixed {
       margin-top: 10px;
@@ -163,15 +147,34 @@
       cursor: pointer;
       font-weight: bold;
     }
+
+    /* Animasi tombol berdenyut */
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(0,191,255,0.7); }
+      70% { box-shadow: 0 0 0 15px rgba(0,191,255,0); }
+      100% { box-shadow: 0 0 0 0 rgba(0,191,255,0); }
+    }
+
+    .big-button {
+      display: inline-block;
+      font-size: 24px;
+      padding: 20px 40px;
+      background-color: #00bfff;
+      border-radius: 12px;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      animation: pulse 2s infinite;
+      transition: transform 0.2s ease;
+    }
+    .big-button:hover {
+      transform: scale(1.05);
+      background-color: #00a0d4;
+    }
+
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
     }
   </style>
 </head>
@@ -203,7 +206,15 @@
   <!-- Konten Utama -->
   <div class="main-container">
     <div class="video-section">
-      <div id="videoContainer">Memuat video...</div>
+      <div id="videoContainer" style="text-align:center; margin-top:40px;">
+        <p style="font-weight:bold; color:#00bfff; font-size:20px; margin-bottom:15px;">
+          JIKA VIDEO TIDAK MUNCUL, KLIK "<span style='color:#ff3333;'>LINK ALTERNATIF</span>" DI BAWAH
+        </p>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+          <a href="#" id="altLink" target="_blank" class="big-button">LINK ALTERNATIF</a>
+          <span style="font-size:18px; color:#ccc;">Klik tombol ini untuk nonton videonya 🎬</span>
+        </div>
+      </div>
 
       <!-- Pesan peringatan DNS -->
       <div class="warning">Matikan DNS Kalau video tidak bisa di play!!!</div>
@@ -233,11 +244,7 @@
     function closePopup() {
       document.getElementById("popup").style.display = "none";
     }
-
-    // Auto-hide popup setelah 6 detik
-    setTimeout(() => {
-      closePopup();
-    }, 6000);
+    setTimeout(() => { closePopup(); }, 6000);
 
     const pathParts = window.location.pathname.split('/');
     const id = pathParts[pathParts.length - 1].trim();
@@ -257,25 +264,19 @@
 
           const container = document.getElementById('videoContainer');
           const url = movie.link;
-          let embed = "";
 
-          if (url.includes("uideo.my") || url.includes("videq.pw") || url.includes("videq.pro")) {
-            embed = `
-              <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen
-                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                referrerpolicy="no-referrer"></iframe>
-              <div style="margin-top: 15px; text-align: center;">
-                <p style="font-weight: bold; color: #00bfff; font-size: 18px; margin-bottom: 8px;">
-                  JIKA VIDEO TIDAK MUNCUL, KLIK "<span style='color: #ff3333;'>LINK ALTERNATIF</span>" DI BAWAH
-                </p>
-                <a href="${url}" target="_blank" class="button">LINK ALTERNATIF</a>
+          // Tampilkan tombol besar + teks panduan
+          container.innerHTML = `
+            <div style="text-align:center; margin-top:40px;">
+              <p style="font-weight:bold; color:#00bfff; font-size:20px; margin-bottom:15px;">
+                JIKA VIDEO TIDAK MUNCUL, KLIK "<span style='color:#ff3333;'>LINK ALTERNATIF</span>" DI BAWAH
+              </p>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+                <a href="${url}" target="_blank" class="big-button">LINK ALTERNATIF</a>
+                <span style="font-size:18px; color:#ccc;">Klik tombol ini untuk nonton videonya 🎬</span>
               </div>
-            `;
-          } else {
-            embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
-          }
-
-          container.innerHTML = embed;
+            </div>
+          `;
         } else {
           document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
         }
