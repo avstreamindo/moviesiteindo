@@ -65,24 +65,26 @@
     /* === COVER + JUDUL === */
     .video-info {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      text-align: center;
       gap: 15px;
       margin-top: 25px;
-      flex-wrap: wrap;
-      text-align: left;
     }
     .video-info img.cover-image {
-      width: 120px;
+      width: 320px;
       height: auto;
       border-radius: 10px;
       border: 2px solid #00bfff;
+      box-shadow: 0 0 20px rgba(0,191,255,0.4);
     }
     .video-info h2 {
       margin: 0;
-      font-size: 18px;
+      font-size: 22px;
       color: #fff;
-      max-width: 500px;
+      max-width: 700px;
+      line-height: 1.4em;
     }
 
     .warning {
@@ -166,7 +168,6 @@
       font-weight: bold;
     }
 
-    /* Animasi tombol berdenyut */
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(0,191,255,0.7); }
       70% { box-shadow: 0 0 0 15px rgba(0,191,255,0); }
@@ -224,6 +225,14 @@
   <!-- Konten Utama -->
   <div class="main-container">
     <div class="video-section">
+
+      <!-- Judul dan Cover di Atas -->
+      <div class="video-info" id="videoInfo">
+        <h2 id="videoTitle2">Judul Video</h2>
+        <img src="/no-cover.jpg" alt="Cover Film" class="cover-image">
+      </div>
+
+      <!-- Area Tombol LINK VIDEO -->
       <div id="videoContainer" style="text-align:center; margin-top:40px;">
         <p style="font-weight:bold; color:#00bfff; font-size:20px; margin-bottom:15px;">
            KLIK "<span style='color:#ff3333;'>LINK VIDEO</span>" DI BAWAH UNTUK TONTON VIDEO
@@ -236,12 +245,6 @@
 
       <!-- Pesan peringatan DNS -->
       <div class="warning">Matikan DNS Kalau video tidak bisa di play!!!</div>
-
-      <!-- Info video -->
-      <div class="video-info" id="videoInfo">
-        <img src="/no-cover.jpg" alt="Cover Film" class="cover-image">
-        <h2 id="videoTitle2">Judul Video</h2>
-      </div>
 
       <!-- Telegram Button -->
       <div class="telegram-fixed">
@@ -286,7 +289,6 @@
           const container = document.getElementById('videoContainer');
           const url = movie.link;
 
-          // Update tombol utama
           container.innerHTML = `
             <div style="text-align:center; margin-top:40px;">
               <p style="font-weight:bold; color:#00bfff; font-size:20px; margin-bottom:15px;">
@@ -299,17 +301,15 @@
             </div>
           `;
 
-          // Update cover
           const videoInfo = document.getElementById("videoInfo");
           videoInfo.innerHTML = `
-            <img src="${movie.cover}" alt="Cover Film" class="cover-image">
             <h2>${movie.title}</h2>
+            <img src="${movie.cover}" alt="Cover Film" class="cover-image">
           `;
         } else {
           document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
         }
 
-        // Sidebar populer
         const listContainer = document.getElementById("popularList");
         if (data.bioskop?.length) {
           data.bioskop.slice(0, 5).forEach(item => {
