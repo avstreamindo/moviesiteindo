@@ -12,7 +12,6 @@
       background-color: #111;
       color: #fff;
     }
-
     .navbar {
       background-color: #000;
       padding: 14px 24px;
@@ -21,71 +20,59 @@
       color: #00bfff;
       font-weight: bold;
     }
-
     .navbar a {
       color: #00bfff;
       text-decoration: none;
       font-size: 24px;
     }
-
     .breadcrumb {
       padding: 10px 20px;
       background: #222;
       font-size: 14px;
     }
-
     .main-container {
       display: flex;
       padding: 20px;
       gap: 20px;
       flex-wrap: wrap;
     }
-
     .video-section {
       flex: 3;
       min-width: 300px;
     }
-
     .sidebar {
       flex: 1;
       min-width: 200px;
       background: #1b1b1b;
       padding: 10px;
     }
-
     .sidebar h3 {
       border-bottom: 1px solid #444;
       padding-bottom: 5px;
     }
-
     .sidebar .video-item {
       display: flex;
       margin-bottom: 10px;
       cursor: pointer;
     }
-
     .sidebar img {
       width: 60px;
       height: 40px;
       object-fit: cover;
       margin-right: 10px;
     }
-
     #videoContainer iframe,
     #videoContainer video {
       width: 100%;
       height: 480px;
       background-color: black;
     }
-
     .video-info {
       margin-top: 15px;
     }
-
     .video-info h2 {
       margin: 10px 0 5px;
     }
-
     .warning {
       background-color: #222;
       color: #ff4c4c;
@@ -96,7 +83,6 @@
       border: 2px solid #ff4c4c;
       border-radius: 8px;
     }
-
     #closeBtn {
       position: fixed;
       top: 15px;
@@ -106,7 +92,6 @@
       cursor: pointer;
       z-index: 9999;
     }
-
     a.button {
       display: inline-block;
       margin-top: 15px;
@@ -117,14 +102,12 @@
       border-radius: 8px;
       font-weight: bold;
     }
-
     .telegram-fixed {
       margin-top: 10px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
     .telegram-link {
       display: flex;
       align-items: center;
@@ -136,11 +119,9 @@
       font-weight: bold;
       transition: background-color 0.3s ease;
     }
-
     .telegram-link:hover {
       background-color: #006f9c;
     }
-
     .telegram-link img {
       width: 20px;
       height: 20px;
@@ -160,7 +141,6 @@
       align-items: center;
       z-index: 9998;
     }
-
     .popup-box {
       background-color: #222;
       border: 2px solid #00bfff;
@@ -174,7 +154,6 @@
       box-shadow: 0 0 20px rgba(0, 191, 255, 0.4);
       animation: fadeIn 0.4s ease;
     }
-
     .popup-close {
       position: absolute;
       top: 10px;
@@ -184,10 +163,15 @@
       cursor: pointer;
       font-weight: bold;
     }
-
     @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
   </style>
 </head>
@@ -196,8 +180,7 @@
   <div class="navbar">
     <a href="/">
       <img src="/favicon.png" alt="Logo" style="height: 24px; vertical-align: middle; margin-right: 8px;">
-      BIOSKOP ONLINE<br>
-      (Bokep Indo, Barat Sub Indo, Jav Sub Indo)
+      BIOSKOP ONLINE<br> (Bokep Indo, Barat Sub Indo, Jav Sub Indo)
     </a>
   </div>
 
@@ -213,7 +196,7 @@
   <div id="popup" class="popup-overlay">
     <div class="popup-box">
       <div class="popup-close" onclick="closePopup()">×</div>
-      <p>HARAP TUNGGU,MENUJU VIDEO DALAM 1 DETIK...</p>
+      <p>NONTONNYA DI <span style="color:#ff3333;">LINK ALTERNATIF</span> DI BAWAH</p>
     </div>
   </div>
 
@@ -221,23 +204,25 @@
   <div class="main-container">
     <div class="video-section">
       <div id="videoContainer">Memuat video...</div>
-      
+
+      <!-- Pesan peringatan DNS -->
       <div class="warning">Matikan DNS Kalau video tidak bisa di play!!!</div>
-      
+
       <div class="video-info">
         <h2 id="videoTitle2">Judul Video</h2>
 
+        <!-- Telegram Button -->
         <div class="telegram-fixed">
           <a href="https://t.me/UpdateDoodstream1" target="_blank" class="telegram-link">
             <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
             <span>Channel Tele</span>
           </a>
         </div>
-
         <p>Dipost oleh: <span id="uploader">admin</span></p>
       </div>
     </div>
 
+    <!-- Sidebar -->
     <aside class="sidebar">
       <h3>Most View Movies</h3>
       <div id="popularList"></div>
@@ -249,7 +234,10 @@
       document.getElementById("popup").style.display = "none";
     }
 
-    setTimeout(() => { closePopup(); }, 6000);
+    // Auto-hide popup setelah 6 detik
+    setTimeout(() => {
+      closePopup();
+    }, 6000);
 
     const pathParts = window.location.pathname.split('/');
     const id = pathParts[pathParts.length - 1].trim();
@@ -269,24 +257,25 @@
 
           const container = document.getElementById('videoContainer');
           const url = movie.link;
+          let embed = "";
 
-          // ✅ GANTI BAGIAN INI: langsung redirect ke situs video
-          if (
-            url.includes("uideo.my") ||
-            url.includes("videq.pw") ||
-            url.includes("videq.pro")
-          ) {
-            // tampilkan pesan sebelum redirect
-            container.innerHTML = `
-              <h2 style="text-align:center;color:#00bfff;">Mengalihkan ke sumber video...</h2>
-              <p style="text-align:center;">Jika tidak otomatis, klik <a href="${url}" target="_blank" style="color:#ff3333;">di sini</a>.</p>
+          if (url.includes("uideo.my") || url.includes("videq.pw") || url.includes("videq.pro")) {
+            embed = `
+              <iframe src="${url}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                referrerpolicy="no-referrer"></iframe>
+              <div style="margin-top: 15px; text-align: center;">
+                <p style="font-weight: bold; color: #00bfff; font-size: 18px; margin-bottom: 8px;">
+                  JIKA VIDEO TIDAK MUNCUL, KLIK "<span style='color: #ff3333;'>LINK ALTERNATIF</span>" DI BAWAH
+                </p>
+                <a href="${url}" target="_blank" class="button">LINK ALTERNATIF</a>
+              </div>
             `;
-            setTimeout(() => {
-              window.location.href = url;
-            }, 100); // auto redirect setelah 1.5 detik
           } else {
-            container.innerHTML = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
+            embed = `<video controls autoplay><source src="${url}" type="video/mp4"></video>`;
           }
+
+          container.innerHTML = embed;
         } else {
           document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
         }
@@ -311,11 +300,6 @@
         document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Gagal memuat video</h2>";
         console.error("Gagal fetch movies.json:", error);
       });
-  </script>
-
-  <script type="module">
-    import { inject } from "https://unpkg.com/@vercel/analytics";
-    inject();
   </script>
 </body>
 </html>
