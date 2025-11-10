@@ -61,12 +61,30 @@
       object-fit: cover;
       margin-right: 10px;
     }
+
+    /* === COVER + JUDUL === */
     .video-info {
-      margin-top: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+      text-align: left;
+    }
+    .video-info img.cover-image {
+      width: 120px;
+      height: auto;
+      border-radius: 10px;
+      border: 2px solid #00bfff;
     }
     .video-info h2 {
-      margin: 10px 0 5px;
+      margin: 0;
+      font-size: 18px;
+      color: #fff;
+      max-width: 500px;
     }
+
     .warning {
       background-color: #222;
       color: #ff4c4c;
@@ -87,10 +105,10 @@
       z-index: 9999;
     }
     .telegram-fixed {
-      margin-top: 10px;
+      margin-top: 15px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: center;
     }
     .telegram-link {
       display: flex;
@@ -219,18 +237,21 @@
       <!-- Pesan peringatan DNS -->
       <div class="warning">Matikan DNS Kalau video tidak bisa di play!!!</div>
 
-      <div class="video-info">
+      <!-- Info video -->
+      <div class="video-info" id="videoInfo">
+        <img src="/no-cover.jpg" alt="Cover Film" class="cover-image">
         <h2 id="videoTitle2">Judul Video</h2>
-
-        <!-- Telegram Button -->
-        <div class="telegram-fixed">
-          <a href="https://t.me/UpdateDoodstream1" target="_blank" class="telegram-link">
-            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
-            <span>Channel Tele</span>
-          </a>
-        </div>
-        <p>Dipost oleh: <span id="uploader">admin</span></p>
       </div>
+
+      <!-- Telegram Button -->
+      <div class="telegram-fixed">
+        <a href="https://t.me/UpdateDoodstream1" target="_blank" class="telegram-link">
+          <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
+          <span>Channel Tele</span>
+        </a>
+      </div>
+
+      <p style="text-align:center;">Dipost oleh: <span id="uploader">admin</span></p>
     </div>
 
     <!-- Sidebar -->
@@ -265,7 +286,7 @@
           const container = document.getElementById('videoContainer');
           const url = movie.link;
 
-          // Tampilkan tombol besar + teks panduan
+          // Update tombol utama
           container.innerHTML = `
             <div style="text-align:center; margin-top:40px;">
               <p style="font-weight:bold; color:#00bfff; font-size:20px; margin-bottom:15px;">
@@ -277,10 +298,18 @@
               </div>
             </div>
           `;
+
+          // Update cover
+          const videoInfo = document.getElementById("videoInfo");
+          videoInfo.innerHTML = `
+            <img src="${movie.cover}" alt="Cover Film" class="cover-image">
+            <h2>${movie.title}</h2>
+          `;
         } else {
           document.getElementById("videoContainer").innerHTML = "<h2 style='color:white;'>Video tidak ditemukan</h2>";
         }
 
+        // Sidebar populer
         const listContainer = document.getElementById("popularList");
         if (data.bioskop?.length) {
           data.bioskop.slice(0, 5).forEach(item => {
