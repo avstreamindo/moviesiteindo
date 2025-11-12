@@ -111,25 +111,39 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 10px; /* tambahan jarak antar tombol */
+      flex-wrap: wrap;
     }
-    .telegram-link {
+    .telegram-link,
+    .home-link {
       display: flex;
       align-items: center;
       text-decoration: none;
-      background-color: #0088cc;
       padding: 8px 14px;
       border-radius: 8px;
       color: white;
       font-weight: bold;
       transition: background-color 0.3s ease;
     }
+    .telegram-link {
+      background-color: #0088cc;
+    }
     .telegram-link:hover {
       background-color: #006f9c;
     }
-    .telegram-link img {
+    .telegram-link img,
+    .home-link img {
       width: 20px;
       height: 20px;
       margin-right: 8px;
+    }
+
+    /* Tombol Nonton Video Lainnya */
+    .home-link {
+      background-color: #00bfff;
+    }
+    .home-link:hover {
+      background-color: #009ed6;
     }
 
     /* === POPUP STYLE === */
@@ -246,11 +260,17 @@
       <!-- Pesan peringatan DNS -->
       <div class="warning">Matikan DNS Kalau video tidak bisa di play!!!</div>
 
-      <!-- Telegram Button -->
+      <!-- Telegram + Home Button -->
       <div class="telegram-fixed">
         <a href="https://t.me/UpdateDoodstream1" target="_blank" class="telegram-link">
           <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
           <span>Channel Telegram</span>
+        </a>
+
+        <!-- Tombol Baru -->
+        <a href="/" class="home-link">
+          <img src="https://cdn-icons-png.flaticon.com/512/25/25694.png" alt="Home" />
+          <span>Nonton Video Lainnya</span>
         </a>
       </div>
 
