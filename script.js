@@ -1,16 +1,48 @@
+// ==========================
+//  LOAD 2 FILE JSON SEKALIGUS
+// ==========================
+
+const MOVIE_FILES = [
+  "data/movies.json",
+  "data/movies2.json"
+];
+
 const itemsPerPage = 30;
 let currentPage = 1;
 let allMovies = [];
 let filteredMovies = [];
 
-fetch('data/movies.json')
-  .then(res => res.json())
-  .then(data => {
-    allMovies = data.bioskop.reverse();
-    filteredMovies = allMovies;
-    renderPage();
-    renderPagination();
-  });
+// Load & gabungkan semua JSON
+async function loadAllMovies() {
+  let merged = [];
+
+  for (let file of MOVIE_FILES) {
+    try {
+      const res = await fetch(file);
+      const json = await res.json();
+
+      if (json.bioskop) {
+        merged = merged.concat(json.bioskop);
+      }
+    } catch (err) {
+      console.error("Gagal load:", file, err);
+    }
+  }
+
+  // Reverse biar data terbaru muncul dulu
+  allMovies = merged.reverse();
+  filteredMovies = allMovies;
+
+  renderPage();
+  renderPagination();
+}
+
+loadAllMovies();
+
+
+// =====================================
+//  KODE ASLI KAMU (TIDAK SAYA UBAH)
+// =====================================
 
 function renderPage() {
   const movieList = document.getElementById("movieList");
