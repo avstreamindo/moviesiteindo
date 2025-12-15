@@ -73,25 +73,25 @@
       color: white;
       max-height: 2.8em;
       overflow: hidden;
-      text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
-      line-clamp: 3;
     }
 
     #videoModal {
       display: none;
       position: fixed;
       z-index: 999;
-      top: 0; left: 0; width: 100%; height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.8);
       justify-content: center;
       align-items: center;
     }
 
     #videoPlayer iframe, #videoPlayer video {
-      width: 90vw; height: 80vh;
+      width: 90vw;
+      height: 80vh;
     }
 
     #closeBtn {
@@ -99,20 +99,12 @@
       top: 20px;
       right: 30px;
       font-size: 30px;
-      color: white;
       cursor: pointer;
     }
 
     #pagination {
       text-align: center;
       padding-bottom: 20px;
-    }
-
-    #pagination button {
-      margin: 5px;
-      padding: 8px 12px;
-      font-size: 16px;
-      cursor: pointer;
     }
 
     #pagination button.active {
@@ -134,17 +126,11 @@
       text-decoration: none;
       display: flex;
       align-items: center;
-      font-family: Arial, sans-serif;
     }
 
     .telegram-link img {
       width: 20px;
-      height: 20px;
       margin-right: 8px;
-    }
-
-    .telegram-link:hover {
-      background-color: #1b8bb8;
     }
 
     .update-banner {
@@ -152,9 +138,7 @@
       top: 10px;
       left: 10px;
       background: red;
-      color: white;
       padding: 6px 10px;
-      font-weight: bold;
       font-size: 13px;
       border-radius: 4px;
       z-index: 9999;
@@ -168,20 +152,67 @@
     .category-buttons button {
       padding: 10px 15px;
       margin: 5px;
-      font-size: 14px;
       border-radius: 5px;
       border: none;
       cursor: pointer;
       background-color: #18e4ff;
-      color: rgb(252, 0, 0);
+      color: red;
     }
 
-    .category-buttons button:hover {
-      background-color: #fefefe;
+    /* ===== POPUP TELEGRAM ===== */
+    #popupOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    #popupBox {
+      background: #111;
+      padding: 25px 30px;
+      max-width: 420px;
+      width: 90%;
+      border-radius: 12px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+
+    #popupBox p {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    #popupClose {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    #popupClose:hover {
+      color: red;
     }
   </style>
 </head>
+
 <body>
+
+  <!-- POPUP -->
+  <div id="popupOverlay">
+    <div id="popupBox">
+      <div id="popupClose">✖</div>
+      <p>
+        Channel Telegram Lama Kena Banned,<br>
+        Gabung Channel Telegram Baru<br>
+        <b>Klik Ikon Telegram Di Pojok Kanan Atas</b>
+      </p>
+    </div>
+  </div>
 
   <div class="update-banner">
     Update Setiap Hari..!!<br>
@@ -191,21 +222,16 @@
 
   <div class="telegram-fixed">
     <a href="https://t.me/YourFavoritAsupan" target="_blank" class="telegram-link">
-      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" alt="Telegram" />
-      <span>Channel Tele Baru</span>
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">
+      Channel Tele Baru
     </a>
   </div>
 
   <h1 style="text-align:center">🎬 Bioskop Online</h1>
 
-  <div style="text-align: center; margin: 10px;">
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="Search..."
-      oninput="handleSearch()"
-      style="padding: 10px; width: 300px; font-size: 16px; border-radius: 8px; border: 1px solid #ccc;"
-    />
+  <div style="text-align:center; margin:10px">
+    <input id="searchInput" placeholder="Search..." oninput="handleSearch()"
+      style="padding:10px; width:300px; border-radius:8px">
   </div>
 
   <div class="category-buttons">
@@ -217,7 +243,7 @@
   </div>
 
   <div class="movie-list" id="movieList"></div>
-  <div id="pagination" class="pagination"></div>
+  <div id="pagination"></div>
 
   <div id="videoModal">
     <div id="closeBtn" onclick="closeVideo()">✖</div>
@@ -226,10 +252,15 @@
 
   <script src="script.js"></script>
 
-  <!-- 🧩 Tambahan Analytics -->
-  <script type="module">
-    import { inject } from "https://unpkg.com/@vercel/analytics";
-    inject();
+  <script>
+    const popupOverlay = document.getElementById("popupOverlay");
+    const popupClose = document.getElementById("popupClose");
+
+    popupClose.onclick = () => popupOverlay.style.display = "none";
+    popupOverlay.onclick = (e) => {
+      if (e.target === popupOverlay) popupOverlay.style.display = "none";
+    };
   </script>
+
 </body>
 </html>
