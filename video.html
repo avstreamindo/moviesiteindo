@@ -209,6 +209,24 @@
       from { opacity: 0; transform: scale(0.9); }
       to { opacity: 1; transform: scale(1); }
     }
+
+    .download-button {
+      display: inline-block;
+      font-size: 22px;
+      padding: 20px 40px;
+      background-color: #28a745;
+      border-radius: 12px;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+
+    .download-button:hover {
+      transform: scale(1.05);
+      background-color: #1e7e34;
+    }
+
   </style>
 </head>
 <body>
@@ -308,11 +326,13 @@
 
           const container = document.getElementById('videoContainer');
           const url = movie.link;
+          const downloadUrl = movie.link_download;
+
 
           container.innerHTML = `
             <div style="text-align:center; margin-top:40px;">
               <p style="font-weight:bold; color:#00bfff; font-size:20px; margin-bottom:15px;">
-                 KLIK "<span style='color:#ff3333;'>LINK VIDEO</span>" DI BAWAH UNTUK NONTON VIDEONYA
+                KLIK "<span style='color:#ff3333;'>LINK VIDEO</span>" DI BAWAH UNTUK NONTON VIDEONYA
               </p>
               <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
                 <a href="${url}" target="_blank" class="big-button">LINK VIDEO</a>
