@@ -334,10 +334,24 @@
               <p style="font-weight:bold; color:#00bfff; font-size:20px; margin-bottom:15px;">
                 KLIK "<span style='color:#ff3333;'>LINK VIDEO</span>" DI BAWAH UNTUK NONTON VIDEONYA
               </p>
-              <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
-                <a href="${url}" target="_blank" class="big-button">LINK VIDEO</a>
-                <span style="font-size:18px; color:#ccc;">Klik tombol ini untuk nonton videonya 🎬</span>
+
+              <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+                <a href="${url}" target="_blank" class="big-button">
+                  LINK NONTON/STREAM
+                </a>
+
+                ${
+                  downloadUrl
+                    ? `<a href="${downloadUrl}" target="_blank" class="download-button">
+                        DOWNLOAD VIDEO
+                      </a>`
+                    : ``
+                }
               </div>
+
+              <span style="display:block; margin-top:15px; font-size:18px; color:#ccc;">
+                Pilih nonton atau download 🎬⬇️
+              </span>
             </div>
           `;
 
