@@ -3,7 +3,9 @@ let currentPage = 1;
 let allMovies = [];
 let filteredMovies = [];
 
-fetch('data/movies.json')
+fetch('data/movies.json', {
+  cache: 'force-cache'
+})
   .then(res => res.json())
   .then(data => {
     allMovies = data.bioskop.reverse();

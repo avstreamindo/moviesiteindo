@@ -311,7 +311,9 @@
     const pathParts = window.location.pathname.split('/');
     const id = pathParts[pathParts.length - 1].trim();
 
-    fetch('/data/movies.json')
+    fetch('/data/movies.json', {
+      cache: 'force-cache'
+    })
       .then(res => res.json())
       .then(data => {
         const movie = data.bioskop?.find(movie => {
